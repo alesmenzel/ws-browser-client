@@ -1,0 +1,68 @@
+{
+  "name": "@alesmenzel/ws-browser-client",
+  "version": "1.0.0-alfa.1",
+  "description": "Light wrapper for browser websocket",
+  "main": "./lib/index.js",
+  "module": "./es/index.js",
+  "unpkg": "./dist/ws.min.js",
+  "keywords": [
+    "websocket",
+    "browser",
+    "wrapper"
+  ],
+  "author": "Aleš Menzel <alesmenze@gmail.com> (https://github.com/alesmenzel)",
+  "license": "MIT",
+  "homepage": "https://github.com/alesmenzel/ws-browser-client",
+  "repository": "https://github.com/alesmenzel/ws-browser-client",
+  "bugs": "https://github.com/alesmenzel/ws-browser-client/issues",
+  "files": [
+    "dist",
+    "lib",
+    "es",
+    "src"
+  ],
+  "scripts": {
+    "clean": "rimraf ./dist",
+    "build": "run-s build:*",
+    "build:umd": "webpack",
+    "build:lib": "babel ./src --out-dir ./lib",
+    "build:es": "cross-env BABEL_ENV=es babel ./src --out-dir ./es",
+    "lint": "eslint .",
+    "format": "eslint --fix .",
+    "prepublishOnly": "cross-env NODE_ENV=production run-s lint test clean build",
+    "publish": "npm publish --access=public"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "babel-loader": "^8.0.6",
+    "cross-env": "^5.2.0",
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-prettier": "^4.2.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.11.0",
+    "husky": "^2.2.0",
+    "lint-staged": "^8.1.6",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^1.17.0",
+    "rimraf": "^2.6.3",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "webpack": "^4.31.0",
+    "webpack-cli": "^3.3.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm test"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  }
+}
