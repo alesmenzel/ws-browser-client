@@ -1,39 +1,46 @@
 # WebSocket for Browser
 
-```js
-const socket = Socket(url, {
-  reconnect: true,
-  reconnectTimeout: 5000 || (attempt) => {},
-  reconnectAttempts: Infinity,
-  emitTimeout: 30000,
-})
+Light wrapper around native WebSocket object that provides reconnect functionality, concept of rooms and ease of use aliases.
 
-options.timeout = 30000; // 30s
-socket.emit('event-type', requestData, [options], (err, responseData) => {
-// err can be a timeout, or server error (e.g. bad request)
+## Installation
+
+To install the stable version:
+
+```bash
+npm install --save @alesmenzel/ws-browser-client
+```
+
+## Usage
+
+WIP
+
+```js
+import WS from '@alesmenzel/ws-browser-client';
+
+const ws = new WS(url, { /* ...options */ });
+
+ws.on('error', (err) => {
+  console.log('Socket Error', err);
 });
 
-socket.join('chat-<id>');
+ws.on('connect', (url) => {
+  console.log('Connected to ', url);
+});
 
-socket.emit('event-type', requestData, [options]);
+ws.on('msg', (msg) => {
+  console.log('Message: ', msg);
+});
 
-socket.on('event-type', (responseData) => {
-// do stuff
-})
+ws.join('chat');
 
-socket.on('error', (err) => {}) // + reconnect errors
-socket.on('connect', (meta) => {}) // + reconnect events
-socket.on('disconnect', (reason) => {})
-
--> join namespace
-<- sync
-<- update
-<- update
-<- update
-- disconnect
--> join namespace
-<- sync
-<- update
-<- update
-<- update
+ws.emit('msg', 'Hello World!');
+// Or with ack
+ws.emit('msg', 'Hello World!', { timeout: 5000 }, (err, data) => {
+  if (err) {
+    console.log('Could not deliver message ', msg);
+    return;
+  }
+  
+  console.log('Message delivered, server response ', data);
+});
 ```
